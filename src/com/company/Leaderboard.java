@@ -113,7 +113,7 @@ public class Leaderboard {
 //        }
 //    }
 
-    // variant 3
+    // variant 4
     static void print() {
         System.out.println("Our leaderboard");
         leaderboard.stream()
