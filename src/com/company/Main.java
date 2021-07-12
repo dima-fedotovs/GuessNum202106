@@ -4,9 +4,10 @@ import java.util.*;
 
 public class Main {
     private static final Scanner scanner = new Scanner(System.in);
-    private static final ArrayList<GameResult> leaderboard = new ArrayList<>();
 
     public static void main(String[] args) {
+        Leaderboard.load();
+
         var random = new Random();
         String userName;
         do {
@@ -32,11 +33,7 @@ public class Main {
                     var t2 = System.currentTimeMillis();
                     userLost = false;
                     System.out.println("You win!");
-                    var result = new GameResult();
-                    result.setName(userName);
-                    result.setAttempts(i + 1);
-                    result.setDuration(t2 - t1);
-                    leaderboard.add(result);
+                    Leaderboard.add(userName, i + 1, t2 - t1);
                     break;
                 }
             }
@@ -46,18 +43,8 @@ public class Main {
             System.out.println("Do you want to repeat?");
         } while (scanner.next().equalsIgnoreCase("yes"));
 
-        leaderboard.sort(
-                Comparator
-                        .comparingInt(GameResult::getAttempts)
-                        .thenComparingLong(GameResult::getDuration)
-        );
-        System.out.println("Our leaderboard");
-        for (var r : leaderboard) {
-            System.out.printf("%s %d %.1f\n",
-                    r.getName(),
-                    r.getAttempts(),
-                    r.getDuration() / 1000.0);
-        }
+        Leaderboard.print();
+        Leaderboard.save();
 
         System.out.printf("Good bye, %s!", userName);
     }
